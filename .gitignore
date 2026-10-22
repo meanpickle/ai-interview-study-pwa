@@ -1,0 +1,21 @@
+# Only original application code, public file metadata and component licenses belong here.
+node_modules/
+dist/
+content-packs/
+private-data/
+downloads/
+test-results/
+*.zip
+*.partial
+learning.json
+learning.previous.json
+*backup*.json
+*备份*.json
+*.study-pack.json
+.env
+.env.*
+*.token
+*.pem
+__pycache__/
+.DS_Store
+Thumbs.db

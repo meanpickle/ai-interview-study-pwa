@@ -1,0 +1,2 @@
+self.STUDY_SHELL_REVISION="e4f5f1b5ccd9749f";
+self.STUDY_SHELL_FILES=["app.js", "catalog.json", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable.png", "icons/icon.svg", "index.html", "licenses/DOMPurify-Apache-MPL.txt", "licenses/HighlightJS-BSD.txt", "licenses/KaTeX-MIT.txt", "licenses/Marked-MIT.txt", "manifest.webmanifest", "mobile.css", "mobile.js", "platform.js", "state.js", "styles.css", "vendor/auto-render.min.js", "vendor/highlight.css", "vendor/highlight.js", "vendor/katex.min.css", "vendor/katex.min.js", "vendor/marked.js", "vendor/purify.js"];

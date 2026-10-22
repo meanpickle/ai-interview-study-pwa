@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import vm from 'node:vm';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),web=path.join(root,'web');
+test('Public catalog has metadata only, without source text or personal records',()=>{const c=JSON.parse(fs.readFileSync(path.join(web,'catalog.json'),'utf8'));assert.equal(c.repositories.length,9);assert.equal(c.repositories.reduce((n,r)=>n+r.docs.length,0),918);for(const r of c.repositories)for(const d of r.docs){assert.deepEqual(Object.keys(d).sort(),['id','kind','path','title']);assert(!('text' in d));assert(d.id.startsWith(r.id+'/'));}});
+test('PWA icon sizes, scope and start URL work in a project subdirectory',()=>{const m=JSON.parse(fs.readFileSync(path.join(web,'manifest.webmanifest'),'utf8'));assert.equal(m.scope,'./');assert.equal(m.start_url,'./');for(const size of [192,512])assert(m.icons.some(i=>i.sizes===`${size}x${size}`&&fs.existsSync(path.join(web,i.src))));});
+test('Offline shell contains all mandatory UI and math assets',()=>{const scope={self:{}};vm.runInNewContext(fs.readFileSync(path.join(web,'shell-files.js'),'utf8'),scope);const names=scope.self.STUDY_SHELL_FILES;for(const required of ['index.html','app.js','platform.js','state.js','mobile.js','catalog.json','vendor/marked.js','vendor/purify.js','vendor/katex.min.js','manifest.webmanifest'])assert(names.includes(required),required);for(const name of names)assert(fs.existsSync(path.join(web,name)),name);assert.match(scope.self.STUDY_SHELL_REVISION,/^[a-f0-9]{16}$/);});
+test('Static entry point uses relative paths rather than root-only URLs',()=>{const html=fs.readFileSync(path.join(web,'index.html'),'utf8');assert(!/(?:src|href)="\//.test(html));assert(html.includes('./platform.js'));});
+test('All 20 math font faces are self-contained WOFF2 data',()=>{const css=fs.readFileSync(path.join(web,'vendor/katex.min.css'),'utf8');assert.equal((css.match(/data:font\/woff2;base64,/g)||[]).length,20);assert(!css.includes('url(fonts/'));});
